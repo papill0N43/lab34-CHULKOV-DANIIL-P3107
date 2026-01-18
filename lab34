@@ -1,0 +1,119 @@
+//Чулков Даниил Павлочич P3107 504604
+import java.util.ArrayList;
+
+abstract class Vehicle {
+    protected int speed;
+    protected String color;
+    protected int position;
+
+    public Vehicle(int speed, String color) {
+        this.speed = speed;
+        this.color = color;
+        this.position = 0;
+    }
+
+    public abstract void move();
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() +
+                "{speed=" + speed +
+                ", color='" + color + '\'' +
+                ", position=" + position + '}';
+    }
+}
+
+class FamiliarCar extends Vehicle {
+    public FamiliarCar(int speed, String color) {
+        super(speed, color);
+    }
+
+    public void turnRight() {
+        System.out.println("Машина повернула направо.");
+    }
+
+    @Override
+    public void move() {
+        position += speed;
+        System.out.println("Обычная машина движется. Позиция: " + position);
+    }
+}
+
+class UnfamiliarCar extends Vehicle {
+    public UnfamiliarCar(int speed, String color) {
+        super(speed, color);
+    }
+
+    public void accelerate() {
+        speed += 10;
+        System.out.println("Неизвестная машина ускорилась! Новая скорость: " + speed);
+    }
+
+    @Override
+    public void move() {
+        position += speed * 2;
+        System.out.println("Неизвестная машина быстро движется. Позиция: " + position);
+    }
+}
+
+interface Character {
+    void observe(Vehicle v);
+}
+
+class Neznaika implements Character {
+    private Vehicle car;
+
+    public Neznaika(Vehicle car) {
+        this.car = car;
+    }
+
+    @Override
+    public void observe(Vehicle v) {
+        System.out.println("Незнайка наблюдает: " + v);
+    }
+}
+
+class Road {
+    private ArrayList<Vehicle> vehicles = new ArrayList<>();
+
+    public void addVehicle(Vehicle v) {
+        vehicles.add(v);
+    }
+
+    public void simulateTraffic() {
+        System.out.println("\n=== Симуляция движения по дороге ===");
+        for (Vehicle v : vehicles) {
+            v.move();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Road road = new Road();
+
+        FamiliarCar neznaikaCar = new FamiliarCar(20, "синий");
+        Neznaika neznaika = new Neznaika(neznaikaCar);
+
+        Vehicle fastCar = new FamiliarCar(40, "красный");
+        Vehicle unknownCar = new UnfamiliarCar(30, "ярко-зелёный");
+
+        road.addVehicle(neznaikaCar);
+        road.addVehicle(fastCar);
+        road.addVehicle(unknownCar);
+
+        System.out.println("Незнайка едет по дороге...");
+        neznaikaCar.turnRight();
+
+        road.simulateTraffic();
+
+        System.out.println("\nВстречная машина промчалась слишком быстро!");
+        neznaika.observe(fastCar);
+
+        System.out.println("\nНеизвестная машина догоняет...");
+        ((UnfamiliarCar) unknownCar).accelerate();
+        neznaika.observe(unknownCar);
+
+        System.out.println("\nСимуляция завершена.");
+    }
+}
