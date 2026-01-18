@@ -1,4 +1,4 @@
-//Чулков Даниил Павлочич P3107 504604
+//Чулков Даниил Павлочич P3107 
 import java.util.ArrayList;
 
 abstract class Vehicle {
